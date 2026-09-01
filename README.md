@@ -28,7 +28,7 @@ npm run dev
 
 ## Deploy
 
-Deploy as a Node.js service with the start command `npm start`. The app has no build step and no API keys. For a production multi-user deployment, replace the local `data/reports.ndjson` report sink with durable storage and add rate limiting/authentication.
+Deploy as a Node.js service with the start command `npm start`. The app has no build step and no API keys. The server serves the app shell at `/` and the ZIP includes a normal `index.html` for editing. For a production multi-user deployment, replace the local `data/reports.ndjson` report sink with durable storage and add rate limiting/authentication.
 
 ## Data and attribution
 
