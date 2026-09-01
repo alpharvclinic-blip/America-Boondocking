@@ -223,12 +223,16 @@ async function handleApi(request, response, url) {
 
 function serveStatic(response, pathname) {
   const requested = pathname === "/" ? "/index.html" : pathname;
-  const filePath = path.normalize(path.join(publicDir, requested));
+  // Keep the entry document at the repository root for hosts that apply
+  // stricter rules to nested HTML paths. All other assets remain in public/.
+  const filePath = requested === "/index.html"
+    ? path.join(__dirname, "app-shell.md")
+    : path.normalize(path.join(publicDir, requested));
   if (!filePath.startsWith(publicDir + path.sep)) return json(response, 403, { error: "Forbidden" });
   fs.readFile(filePath, (error, content) => {
     if (error) return json(response, 404, { error: "Not found" });
     response.writeHead(200, {
-      "Content-Type": mimeTypes[path.extname(filePath)] || "application/octet-stream",
+      "Content-Type": requested === "/index.html" ? "text/html; charset=utf-8" : (mimeTypes[path.extname(filePath)] || "application/octet-stream"),
       "X-Content-Type-Options": "nosniff"
     });
     response.end(content);
